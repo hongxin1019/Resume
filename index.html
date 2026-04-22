@@ -32,7 +32,6 @@
         body {
             height: 100%;
             background: transparent;
-            /* 讓底層紋理顯示出來 */
             color: var(--ink);
             font-family: 'DM Sans', sans-serif;
             overflow-x: hidden;
@@ -48,7 +47,6 @@
             height: 100%;
             pointer-events: none;
             z-index: -1;
-            /* 移除背景色，讓底下的藝術背景透上來 */
         }
 
         /* ── Figma Background 7 重建 ── */
@@ -60,7 +58,6 @@
             align-items: center;
             justify-content: center;
             background: #f2ede6;
-            /* 回退背景色 */
             pointer-events: none;
         }
 
@@ -77,7 +74,6 @@
             position: absolute;
             inset: 0;
             opacity: 0.15;
-            /* 控制紋理的細微強度 */
             filter: url(#noiseFilter);
             pointer-events: none;
         }
@@ -85,9 +81,7 @@
         /* ── 響應式佈局 ── */
         .page {
             max-width: 1300px;
-            /* 限制寬度，避免版面太散 */
             margin: 2.5rem auto;
-            /* 上下留白，左右置中 */
             display: grid;
             grid-template-columns: clamp(320px, 30vw, 420px) 1fr;
             min-height: calc(100vh - 5rem);
@@ -96,18 +90,14 @@
             box-shadow: 0 50px 100px -20px rgba(0, 0, 0, 0.08),
                 0 30px 60px -30px rgba(0, 0, 0, 0.05);
             border-radius: 24px;
-            /* 與拼圖風格統一的圓角 */
             overflow: hidden;
-            /* 確保內容不會超出圓角邊框 */
             border: 1px solid rgba(255, 255, 255, 0.4);
-            /* 極細的亮邊增加高級感 */
             z-index: 5;
         }
 
         /* ── Suggestion 1: Corner Marginalia (改為固定在瀏覽器角落) ── */
         .marginalia {
             position: fixed;
-            /* 改為與視窗固定，避免與內容卡片重疊 */
             font-family: 'DM Mono', monospace;
             font-size: 0.65rem;
             color: var(--ink3);
@@ -115,7 +105,6 @@
             letter-spacing: 2px;
             pointer-events: none;
             z-index: 1;
-            /* 置於卡片下方或最底層 */
             opacity: 0.6;
         }
 
@@ -159,12 +148,11 @@
         .photo-wrap::before {
             content: '';
             position: absolute;
-            /* 預設：向右下位移的藍灰色框 */
-            inset: 20px -20px -20px 20px;
-            border: 4px solid #8ca2c0;
+            inset: 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
             opacity: 0.8;
-            z-index: -1;
-            transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            z-index: 1;
+            pointer-events: none;
         }
 
         .photo-wrap img {
@@ -172,23 +160,20 @@
             aspect-ratio: 4/5;
             object-fit: cover;
             display: block;
-            /* 預設：黑白與高對比 */
-            filter: grayscale(100%) contrast(1.1);
-            transition: all 0.4s ease;
+            filter: blur(8px);
+            transform: scale(1.1);
+            transition: filter 0.5s ease, transform 0.5s ease;
         }
 
         /* ── Hover 效果 ── */
         .photo-wrap:hover {
             transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
         }
 
-        .photo-wrap:hover::before {
-            /* 懸停時移除邊框線條 */
-            opacity: 0;
-            inset: -8px;
-            z-index: 1;
-            pointer-events: none;
+        .photo-wrap:hover img {
+            filter: blur(0);
+            transform: scale(1);
         }
 
         .photo-wrap:hover img {
@@ -198,7 +183,6 @@
         .name {
             font-family: 'Cormorant Garamond', serif;
             font-size: clamp(2.5rem, 4vw, 3.5rem);
-            /* 字體隨螢幕大小縮放 */
             font-weight: 300;
             font-style: italic;
             line-height: 0.95;
@@ -214,7 +198,6 @@
             display: flex;
             flex-direction: column;
             gap: 0.8rem;
-            /* 標籤之間的間距 */
         }
 
         .intro-tag {
@@ -256,7 +239,6 @@
             padding: 2rem;
             position: relative;
             background: var(--surface);
-            /* 稍微區分左右色塊 */
         }
 
         /* ── Suggestion 2: Background Decor Lines ── */
@@ -284,7 +266,6 @@
 
         .puzzle-area {
             position: relative;
-            /* 讓拼圖在小螢幕佔滿 90%，在大螢幕最大 600px */
             width: min(600px, 90%);
             aspect-ratio: 1;
             transition: opacity 0.4s ease;
@@ -295,14 +276,12 @@
             height: 100%;
             display: block;
             overflow: visible !important;
-            /* 確保陰影不論多大都不會被畫布邊緣切掉 */
         }
 
         .piece {
             cursor: pointer;
             transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), filter 0.4s ease;
             touch-action: manipulation;
-            /* 移除行動裝置點擊延遲 */
         }
 
         /* 預設陰影與 Transition */
@@ -354,16 +333,13 @@
             display: none;
             flex-direction: column;
             justify-content: flex-start;
-            /* 改為從頂部開始，配合 padding 以利滾動 */
             align-items: center;
             text-align: center;
             padding: 5rem 2rem;
-            /* 增加上下內距，預留關閉按鈕空間 */
             opacity: 0;
             transform: translateY(20px);
             transition: all 0.5s ease;
             overflow-y: auto;
-            /* 支援長文本滾動 */
         }
 
         .content-box.active {
@@ -385,12 +361,10 @@
 
         .c-body {
             max-width: 550px;
-            /* 增加寬度以容納自傳 */
             line-height: 1.8;
             color: var(--ink2);
             margin-bottom: 2rem;
             white-space: pre-wrap;
-            /* 重要：保留內容中的換行與空格 */
             font-size: 0.95rem;
             text-align: justify;
         }
@@ -483,7 +457,6 @@
             border-radius: 10px;
             transition: width 1.5s cubic-bezier(0.22, 1, 0.36, 1);
             width: 0;
-            /* JS 控制寬度 */
         }
 
         /* ── Lightbox (圖片放大查看) ── */
